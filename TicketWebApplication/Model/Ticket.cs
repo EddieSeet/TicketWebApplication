@@ -30,7 +30,7 @@ namespace TicketWebApplication.Model
 
 
         [FromForm]
-        [Required]
+        //[Required]
         public string FileName  { get; set; }
 
 

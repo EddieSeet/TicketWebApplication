@@ -210,37 +210,51 @@ namespace TicketWebApplication.Controllers
             if (ModelState.IsValid)
             {
 
+                System.Diagnostics.Debug.WriteLine("ModelState is valid");
 
                 Ticket newTicket = new Ticket
                 {
 
-                    FileName = ticketModel.Thefile.FileName
+                    PLU = ticketModel.PLU
 
                 };
 
                 //   string uniqueFileName = null;
                 if (ticketModel.Thefile != null)
                 {
-                    System.Diagnostics.Debug.WriteLine("thisisrunning");
-
-
-                    System.Diagnostics.Debug.WriteLine("thisisrunning" + ticketModel.Thefile.FileName);
-
+                    System.Diagnostics.Debug.WriteLine("File is not null");
 
                     var pa = @"C:\Users\User\source\repos\TicketWebApplication\TicketWebApplication\Resources\folder";
+
 
                     // uniqueFileName = Guid.NewGuid().ToString() + "_" + ticketModel.Thefile.FileName;
                     string filePath = Path.Combine(pa, ticketModel.Thefile.FileName);
 
-                    ticketModel.Thefile.CopyTo(new FileStream(filePath, FileMode.Create));
+                    if (System.IO.File.Exists(filePath) == true)
+                    {
+                       
+                        System.Diagnostics.Debug.WriteLine("have the file");
+                        return Conflict();
+                    }
+                    else
+                    {
+                        ticketModel.Thefile.CopyTo(
+                            new FileStream(filePath, FileMode.Create)
+                        );
 
-                    //need to run the command to process the exe.
+
+
+                        newTicket.FileName = ticketModel.Thefile.FileName;
+                        _context.Ticket.Add(newTicket);
+
+                    }
+
+
 
                 }
 
 
 
-                _context.Ticket.Add(newTicket);
                 await _context.SaveChangesAsync();
 
                 return CreatedAtAction("GetTicket", new { id = newTicket.PLU }, newTicket);
