@@ -1,0 +1,32 @@
+.example-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /*Encompass the form parts */
+  .example-container > * {
+    width: 100%;
+    display: flex;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center ;
+}
+  
+/*Placement for Parts of the form*/
+.example-container2 > * {
+  width: 30%;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.75%;
+  justify-content: center ;
+
+}
+
+/*submit button*/
+.example-container3 > * {
+  width:100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0.75%;
+}

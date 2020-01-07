@@ -228,7 +228,7 @@ namespace TicketWebApplication.Controllers
 
 
                     // uniqueFileName = Guid.NewGuid().ToString() + "_" + ticketModel.Thefile.FileName;
-                    string filePath = Path.Combine(pa, ticketModel.Thefile.FileName);
+                    string filePath = Path.Combine(pa, ticketModel.Thefile.FileName );
 
                     if (System.IO.File.Exists(filePath) == true)
                     {
@@ -241,7 +241,7 @@ namespace TicketWebApplication.Controllers
                         ticketModel.Thefile.CopyTo(
                             new FileStream(filePath, FileMode.Create)
                         );
-
+                         
 
 
                         newTicket.FileName = ticketModel.Thefile.FileName;
@@ -262,7 +262,7 @@ namespace TicketWebApplication.Controllers
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("fuk");
+                System.Diagnostics.Debug.WriteLine("broken");
 
                 return BadRequest(ModelState);
             }
