@@ -44,6 +44,9 @@
 
   </div> -->
 
+
+
+<!-- V2
 <form [formGroup]="newTicket" (ngSubmit)="submitForm();">
 
 
@@ -73,7 +76,6 @@
         </mat-form-field>
       </div>
 
-      <!-- <input type="file" (change)="uploadFile($event)"> -->
     </div>
 
     <div class="example-container2">
@@ -85,26 +87,107 @@
   </div>
 </form>
 
+-->
 
 
 
 
-<!--   desired file input
-  <mat-form-field>
-    <ngx-mat-file-input #removableInput formControlName="removablefile" placeholder="Removable Input"></ngx-mat-file-input>
-    <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
-      <mat-icon>clear</mat-icon>
-    </button>
-  </mat-form-field> -->
 
-<!-- <mat-form-field>
-    <ngx-mat-file-input formControlName="requiredfile" placeholder="Required input" valuePlaceholder="No file selected" required></ngx-mat-file-input>
-    <mat-icon matSuffix>folder</mat-icon>
-    <mat-error *ngIf="formDoc.get('requiredfile').hasError('required')">
-      Please select a file
-    </mat-error>
-    <mat-error *ngIf="formDoc.get('requiredfile').hasError('maxContentSize')">
-      The total size must not exceed {{formDoc.get('requiredfile')?.getError('maxContentSize').maxSize | byteFormat}} ({{formDoc.get('requiredfile')?.getError('maxContentSize').actualSize
-      | byteFormat}}).
-    </mat-error>
-  </mat-form-field> -->
+<mat-horizontal-stepper labelPosition="bottom" #stepper>
+
+
+  <mat-step [stepControl]="newTicket">
+    <form [formGroup]="newTicket">
+      <ng-template matStepLabel>Upload Template</ng-template>
+
+      <div class="example-container4">
+
+        <mat-form-field hintLabel="Upload a template">
+          <ngx-mat-file-input #removableInput formControlName="Thefile" placeholder="Click Me"></ngx-mat-file-input>
+          <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+
+        <div>
+          <button mat-raised-button color="primary" matStepperNext>Next</button>
+        </div>
+
+      </div>
+    </form>
+
+  </mat-step>
+
+
+
+
+  <mat-step [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Add PLU(s)</ng-template>
+
+      <div class="example-container4">
+        <div class="example-container5">
+          <!-- 
+          <mat-form-field>
+            <input matInput placeholder="PLU" formControlName="secondCtrl" required>
+          </mat-form-field> -->
+
+
+
+          <mat-form-field hintLabel="20 characters required">
+            <input matInput #input maxlength="20" placeholder="PLU" formControlName="secondCtrl">
+            <mat-error>
+              Number of characters: {{secondFormGroup.get("secondCtrl").value?.length}}. Required: 20 Characters
+            </mat-error>
+          </mat-form-field>
+
+
+
+          <div>
+            <!-- extra button to add additional plu-->
+            <button mat-raised-button color="primary" [disabled]="secondFormGroup.get('secondCtrl').value?.length < 20 "
+              (click)="Add()">Add</button>
+          </div>
+          <br>
+        </div>
+
+        <span *ngFor="let item of listofPlu;let i = index" class="example-container6">
+          PLU {{i}}: {{item }}
+        </span>
+        <br>
+
+
+
+        <div>
+
+
+
+          <button mat-stroked-button color="primary" matStepperPrevious>Back</button>
+          <!-- <button mat-button matStepperNext *ngIf="this.listofPlu.length > 0">Next</button> -->
+          <button mat-stroked-button color="primary" matStepperNext
+            [disabled]="this.listofPlu.length == 0">Next</button>
+        </div>
+      </div>
+
+    </form>
+
+
+  </mat-step>
+
+
+
+
+
+
+  <mat-step>
+    <ng-template matStepLabel>Review</ng-template>
+    Review
+    <div>
+      <button mat-button matStepperPrevious>Back</button>
+      <button mat-button [routerLink]="['/']">Done</button>
+    </div>
+  </mat-step>
+
+
+</mat-horizontal-stepper>

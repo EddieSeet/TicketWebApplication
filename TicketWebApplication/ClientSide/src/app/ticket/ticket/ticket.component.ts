@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from "@angular/forms"
 import { HttpClient } from '@angular/common/http';
 
 import {TicketService} from "../../service/ticket.service";
-import { FileValidator } from 'ngx-material-file-input';
+// import { FileValidator } from 'ngx-material-file-input';
 
 
 
@@ -13,19 +13,25 @@ import { FileValidator } from 'ngx-material-file-input';
   styleUrls: ['./ticket.component.css']
 })
 export class TicketComponent implements OnInit {
-  readonly maxSize = 104857600;
+
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+
+
+//for more than 1 plu
+numbPlu = 1;
+listofPlu = [];
 
   constructor(
     private ticketService: TicketService,
     
+    private _formBuilder: FormBuilder
     
-    private _fb: FormBuilder
     ) { }
 
 
    
   newTicket: FormGroup;
-  formDoc: FormGroup;
 
 
   ngOnInit() {
@@ -38,16 +44,18 @@ export class TicketComponent implements OnInit {
 
 
 
-    //example
-    this.formDoc = this._fb.group({
-      requiredfile: [
-        undefined,
-        [Validators.required, FileValidator.maxContentSize(this.maxSize)]
-      ]
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
     });
 
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: [null, [Validators.required, Validators.minLength(20)] ]
+    })
 
   }
+
+
+  
 
   uploadFile(event) {
     const file = (event.target as HTMLInputElement).files[0];
@@ -73,6 +81,24 @@ export class TicketComponent implements OnInit {
     //   (error) => console.log(error)
     // )
   }
+
+//adding plu
+Add(){
+console.log(this.secondFormGroup.value.secondCtrl)
+this.listofPlu.push(this.secondFormGroup.value.secondCtrl)
+console.log(this.listofPlu)
+
+
+//reseting form
+this.secondFormGroup.reset();
+Object.keys(this.secondFormGroup.controls).forEach(key => {
+  this.secondFormGroup.controls[key].setErrors(null)
+});
+
+}
+
+
+
 
 
 }
