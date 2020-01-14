@@ -23,13 +23,15 @@ export class TicketService {
     // }
     //    https://localhost:44390/api/Tickets
 
-    return this.httpClient.post(
-      'https://localhost:44390/api/Tickets',
-      ticket,
-      {
-        reportProgress: true,
-        observe: 'events'
-      }
+    console.log(ticket)
+
+
+    return this.httpClient.post<any>('https://localhost:44390/api/Tickets', ticket
+    //,
+      // {
+      //   reportProgress: true,
+      //   observe: 'events'
+      // }
     ).pipe(
       tap(data =>
         console.log(data)

@@ -117,18 +117,29 @@ export class TicketComponent implements OnInit {
 
   submitForm() {
 
-    console.log(this.listofPlu.length)
-    console.log(this.newTicket.get("Thefile").value.name)
+   // console.log(this.listofPlu.length)
+    //console.log(this.newTicket.get("Thefile").value.name)
 
 
-    for (var i = 0; i < this.listofPlu.length; i ++){
+    for (var i = 0; i < this.listofPlu.length; i++) {
 
       var formData: any = new FormData();
       formData.append("PLU", this.listofPlu[i]);
-      formData.append("Thefile", this.newTicket.get('Thefile').value);
-      
+
+      if (i == 0) {
+        formData.append("Thefile", this.newTicket.get('Thefile').value);
+      }
+      else if (i > 0) {
+        formData.append("Thefile", this.newTicket.get('Thefile').value.name);
+      }
+
+      //console logging form data value. 
+      for (var value of formData.values()) {
+        console.log( typeof(value)); 
+     }
+
       this.ticketService.AddTicket(formData)
-        
+
     }
 
 
