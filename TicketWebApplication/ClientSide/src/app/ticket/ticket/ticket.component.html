@@ -91,27 +91,35 @@
 
 
 
+<mat-horizontal-stepper linear labelPosition="bottom" #stepper>
 
 
-<mat-horizontal-stepper labelPosition="bottom" #stepper>
-
-
-  <mat-step [stepControl]="newTicket">
-    <form [formGroup]="newTicket">
+  <mat-step [stepControl]="firstFormGroup" [completed]="false">
+    <form [formGroup]="firstFormGroup">
       <ng-template matStepLabel>Upload Template</ng-template>
 
       <div class="example-container4">
 
-        <mat-form-field hintLabel="Upload a template">
-          <ngx-mat-file-input #removableInput formControlName="Thefile" placeholder="Click Me"></ngx-mat-file-input>
+        <mat-form-field hintLabel="Upload a template" hintLabel="Must be PDF">
+          <ngx-mat-file-input #removableInput formControlName="Thefile" placeholder="Click Me"
+            (change)="uploadFile($event)"> </ngx-mat-file-input>
+
           <button mat-icon-button matSuffix *ngIf="!removableInput.empty" (click)="removableInput.clear($event)">
             <mat-icon>clear</mat-icon>
           </button>
+          <mat-error>Please Upload File</mat-error>
         </mat-form-field>
+
+        <span *ngIf="extension" style="color: red;">Invalid File Type</span>
+
+        <!-- <span *ngIf=" firstFormGroup.get('Thefile').touched && firstFormGroup.get('Thefile').errors">Cannot accept blanks</span> -->
+
+
+
 
 
         <div>
-          <button mat-raised-button color="primary" matStepperNext>Next</button>
+          <button mat-raised-button color="primary" [disabled]="extension" matStepperNext>Next</button>
         </div>
 
       </div>
@@ -122,11 +130,11 @@
 
 
 
-  <mat-step [stepControl]="secondFormGroup">
+  <mat-step [stepControl]="secondFormGroup" [completed]="false">
     <form [formGroup]="secondFormGroup">
       <ng-template matStepLabel>Add PLU(s)</ng-template>
 
-      <div class="example-container4">
+      <div class="example-containerF">
         <div class="example-container5">
           <!-- 
           <mat-form-field>
@@ -137,9 +145,13 @@
 
           <mat-form-field hintLabel="20 characters required">
             <input matInput #input maxlength="20" placeholder="PLU" formControlName="secondCtrl">
-            <mat-error>
+            <mat-error *ngIf="secondFormGroup.get('secondCtrl').value?.length != 20 ">
               Number of characters: {{secondFormGroup.get("secondCtrl").value?.length}}. Required: 20 Characters
             </mat-error>
+
+            <mat-error *ngIf="secondFormGroup.get('secondCtrl').value?.length==20 &&duplicate" style="color: red;">
+              Already Exist at Position: {{dupPosition +1}}</mat-error>
+
           </mat-form-field>
 
 
@@ -150,10 +162,14 @@
               (click)="Add()">Add</button>
           </div>
           <br>
+          <!-- <div *ngIf="duplicate">
+            <span style="color: red;"> Already Exist at Position: {{dupPosition +1}}</span>
+          </div> -->
         </div>
 
         <span *ngFor="let item of listofPlu;let i = index" class="example-container6">
-          PLU {{i}}: {{item }}
+          PLU {{i + 1}}:
+          {{item }}
         </span>
         <br>
 
@@ -180,13 +196,39 @@
 
 
 
-  <mat-step>
+  <mat-step [completed]="false">
     <ng-template matStepLabel>Review</ng-template>
-    Review
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button [routerLink]="['/']">Done</button>
+
+    <div class="example-container7">
+      <!-- <div> Review</div> -->
+
+      <span class= "example-containerCenter" > Review</span>
+
+      <div class="example-container6" *ngIf="listofPlu.length > 0">
+
+        <div class="filecontainer">
+          FileName: {{this.newTicket.get("Thefile").value.name}}
+        </div>
+
+
+
+        <!-- <div class="example-container7">
+          PDF: {{this.newTicket.get("Thefile").value.file}}
+        </div> -->
+        <div *ngFor="let item of listofPlu; let i=index">
+          <span> PLU {{i+1}}: {{item}}<br> </span>
+        </div>
+      </div>
+
+
+
+      <div>
+        <button mat-button matStepperPrevious>Back</button>
+        <button mat-button (click)="submitForm()" [routerLink]="['/Ticket']">submit</button>
+      </div>
     </div>
+
+
   </mat-step>
 
 

@@ -10,7 +10,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import {angularMaterial} from "./angularMaterial";
-import { HomeComponent } from './home/home/home.component'; 
+import { HomeComponent } from './home/home/home.component';
+import { HeaderComponent } from './header/header/header.component';
+import { SummaryComponent } from './summary/summary/summary.component'; 
 
 
 @NgModule({
@@ -18,6 +20,8 @@ import { HomeComponent } from './home/home/home.component';
     AppComponent,
     TicketComponent,
     HomeComponent,
+    HeaderComponent,
+    SummaryComponent,
     
   ],
   imports: [

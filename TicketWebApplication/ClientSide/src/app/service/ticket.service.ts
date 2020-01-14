@@ -22,6 +22,7 @@ export class TicketService {
     //   headers: httpHeaders
     // }
     //    https://localhost:44390/api/Tickets
+
     return this.httpClient.post(
       'https://localhost:44390/api/Tickets',
       ticket,
@@ -32,7 +33,8 @@ export class TicketService {
     ).pipe(
       tap(data =>
         console.log(data)
-      ),
+
+        ),
       catchError(this.handleError)
 
     )
