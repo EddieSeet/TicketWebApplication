@@ -219,20 +219,23 @@ namespace TicketWebApplication.Controllers
 
                 };
 
-                System.Diagnostics.Debug.WriteLine(ticketModel.PLU + ticketModel.Thefile);
                 
 
                 //   string uniqueFileName = null;
-                if (ticketModel.Thefile != null)
+                if (ticketModel.Thefile != null || ticketModel.FileName != null)
                 {
 
 
-                    System.Diagnostics.Debug.WriteLine("File is not null");
-                    System.Diagnostics.Debug.WriteLine(ticketModel.Thefile);
+                    System.Diagnostics.Debug.WriteLine("File / filename is not null");
+                    System.Diagnostics.Debug.WriteLine( "if"+ ticketModel.PLU);
 
-                    if (ticketModel.Thefile.FileName.GetType() == typeof(string))
+
+                    if (ticketModel.Thefile  != null && ticketModel.Thefile.FileName.GetType() == typeof(string))
                     {
                         System.Diagnostics.Debug.WriteLine("File is string1 will copy");
+
+                        System.Diagnostics.Debug.WriteLine(ticketModel.PLU);
+                        System.Diagnostics.Debug.WriteLine(ticketModel.Thefile.FileName);
 
                         var pa = @"C:\Users\User\source\repos\TicketWebApplication\TicketWebApplication\Resources\folder";
 
@@ -259,8 +262,15 @@ namespace TicketWebApplication.Controllers
 
                         }
                     }
-                    else if ( ticketModel.Thefile.GetType() == typeof(string) )
+                    //else if ( ticketModel.FileName.GetType() == typeof(string) )
+                  //  else if (ticketModel.FileName != null)
+                    else if   (ticketModel.FileName.GetType() == typeof(string)  && ticketModel.FileName != null )
                     {
+                        System.Diagnostics.Debug.WriteLine("else" + ticketModel.PLU);
+
+                        System.Diagnostics.Debug.WriteLine(ticketModel.FileName +ticketModel.FileName);
+
+
                         System.Diagnostics.Debug.WriteLine("File is string2 will not copy but insert");
                         newTicket.FileName = ticketModel.FileName;
                         _context.Ticket.Add(newTicket);
