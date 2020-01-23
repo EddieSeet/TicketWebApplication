@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 
@@ -237,10 +238,13 @@ namespace TicketWebApplication.Controllers
                         System.Diagnostics.Debug.WriteLine(ticketModel.PLU);
                         System.Diagnostics.Debug.WriteLine(ticketModel.Thefile.FileName);
 
-                        var pa = @"C:\Users\User\source\repos\TicketWebApplication\TicketWebApplication\Resources\folder";
-
+                        //var pa = @"C:\Users\User\source\repos\TicketWebApplication\TicketWebApplication\Resources\folder";
+                        var pa = @"C:\MockBatchJob\BulkPdfEmailGeneration\Temppdftemplate";
+                        var Extrapa = @"C:\MockBatchJob\BulkPdfEmailGeneration\temptest";
 
                         // uniqueFileName = Guid.NewGuid().ToString() + "_" + ticketModel.Thefile.FileName;
+                        string ExtrafilePath = Path.Combine(Extrapa, ticketModel.Thefile.FileName);
+
                         string filePath = Path.Combine(pa, ticketModel.Thefile.FileName);
 
                         if (System.IO.File.Exists(filePath) == true)
@@ -252,13 +256,23 @@ namespace TicketWebApplication.Controllers
                         else
                         {
                             ticketModel.Thefile.CopyTo(
-                                new FileStream(filePath, FileMode.Create)
-                            );
+                                new FileStream(ExtrafilePath, FileMode.Create));
 
-
+                            //copy the file
+                            System.IO.File.Copy(ExtrafilePath, filePath);
 
                             newTicket.FileName = ticketModel.Thefile.FileName;
                             _context.Ticket.Add(newTicket);
+
+                            var process = Process.Start("C:\\MockBatchJob\\PDFConfigRelease\\ConsoleApp4.exe");
+                            if (process == null) // failed to start
+                            {
+                                return InternalServerError();
+                            }
+                            else // Started, wait for it to finish
+                            {
+                                process.WaitForExit();
+                            }
 
                         }
                     }
@@ -308,6 +322,11 @@ namespace TicketWebApplication.Controllers
             //end
 
 
+        }
+
+        private ActionResult<Ticket> InternalServerError()
+        {
+            throw new NotImplementedException();
         }
 
 
